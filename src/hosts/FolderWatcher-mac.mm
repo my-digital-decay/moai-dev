@@ -3,6 +3,7 @@
 //
 
 #import "FolderWatcher-mac.h"
+#include <moaicore/AKU.h>
 #import "GlutHost.h"
 
 #import <Foundation/Foundation.h>

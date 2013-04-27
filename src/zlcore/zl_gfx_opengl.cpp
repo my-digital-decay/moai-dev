@@ -14,7 +14,7 @@ using namespace std;
 #endif
 
 #ifdef MOAI_OS_OSX
-	//#include <GL/glew.h>
+	#include <GL/glew.h>
 	#include <OpenGL/gl.h>
 	#include <OpenGL/glext.h>
 #endif

@@ -7,8 +7,6 @@ Thumbs.db
 /ide/bin
 /ide/obj
 
-/src/config
-
 build/
 xcuserdata/
 DerivedData/
@@ -25,3 +23,8 @@ cmake_install.cmake
 src/moai/moai
 release
 tmp
+
+# mdd
+out/
+bin/moai*
+
