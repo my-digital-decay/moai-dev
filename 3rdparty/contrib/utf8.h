@@ -31,7 +31,7 @@
 		#define _snprintf snprintf
 #endif
 
-#if defined ( __FLASCC__ )
+#if defined ( __linux ) || defined ( __FLASCC__ )
     #include <sys/types.h>
 #endif
 

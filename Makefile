@@ -11,7 +11,7 @@ all: osx ios
 
 premake-osx: premake4.lua
 	@echo "Generating makefiles for osx ..."
-	@premake --file=./premake4.lua --gcc=osx --platform=x32 gmake
+	@premake4 --file=./premake4.lua --gcc=osx --platform=x32 gmake
 .PHONY: premake-osx
 
 osx-debug:
@@ -34,7 +34,7 @@ osx: osx-debug osx-release
 
 premake-ios: premake4.lua
 	@echo "Generating makefiles for ios ..."
-	@premake --file=./premake4.lua --gcc=ios --platform=x32 gmake
+	@premake4 --file=./premake4.lua --gcc=ios --platform=x32 gmake
 .PHONY: premake-ios
 
 ios-debug:
@@ -50,11 +50,34 @@ ios-release:
 ios: ios-debug ios-release
 .PHONY: ios
 
+#
+# Linux
+#
+
+premake-linux: premake4.lua
+	@echo "Generating makefiles for linux ..."
+	@premake4 --file=./premake4.lua --gcc=linux --platform=x32 gmake
+.PHONY: premake-ios
+
+linux-debug:
+	@${MAKE} premake-linux
+	@${MAKE} -C build/gmake-linux config=debug32
+.PHONY: linux-debug
+
+linux-release:
+	@${MAKE} premake-linux
+	@${MAKE} -C build/gmake-linux config=release32
+.PHONY: linux-release
+
+linux: linux-debug linux-release
+.PHONY: linux
+
 
 clean:
 	@test -d build/gmake-osx && ${MAKE} -C build/gmake-osx clean; true
 	@test -d build/gmake-ios && ${MAKE} -C build/gmake-ios clean; true
-	@test -d out && rm -fdr out/; true
+	@test -d build/gmake-linux && ${MAKE} -C build/gmake-linux clean; true
+	@test -d out && rm -r out/; true
 .PHONY: clean
 
 help:
@@ -68,6 +91,9 @@ help:
 	@echo "   ios"
 	@echo "   ios-debug"
 	@echo "   ios-release"
+	@echo "   linux"
+	@echo "   linux-debug"
+	@echo "   linux-release"
 	@echo "   clean"
 	@echo "   help"
 .PHONY: help

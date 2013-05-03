@@ -27,11 +27,11 @@
 	#endif
 	
 	#ifndef MOAI_WITH_LIBCRYPTO
-		#define MOAI_WITH_LIBCRYPTO 1
+		#define MOAI_WITH_LIBCRYPTO 0
 	#endif
 	
 	#ifndef MOAI_WITH_LIBCURL
-		#define MOAI_WITH_LIBCURL 1
+		#define MOAI_WITH_LIBCURL 0
 	#endif
 	
 	#ifndef MOAI_WITH_LIBJPG
@@ -47,7 +47,7 @@
 	#endif
 
 	#ifndef MOAI_WITH_OPENSSL
-		#define MOAI_WITH_OPENSSL 1
+		#define MOAI_WITH_OPENSSL 0
 	#endif
 	
 	#ifndef MOAI_WITH_TINYXML

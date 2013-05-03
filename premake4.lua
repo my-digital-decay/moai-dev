@@ -18,6 +18,7 @@ solution "moai"
     allowed = {
       { "osx", "OS X" },
       { "ios", "iOS" },
+      { "linux", "Linux" },
     }
   }
 
@@ -37,6 +38,10 @@ solution "moai"
     if "ios" == _OPTIONS.gcc then
       location ("build/" .. _ACTION .. "-ios")
       DEV_PATH = trim(os.outputof("xcode-select --print-path")) .. "/Platforms/iPhoneOS.platform/Developer"
+    end
+
+    if "linux" == _OPTIONS.gcc then
+      location ("build/" .. _ACTION .. "-linux")
     end
 
     OUT_PATH = ("out/" .. _OPTIONS.gcc)
@@ -89,23 +94,31 @@ solution "moai"
     defines {
       "MACOSX",
       "DARWIN_NO_CARBON",
---      "POSIX",
+      "POSIX",
       "L_ENDIAN",
+    }
+
+  configuration "linux"
+    defines {
+      "LINUX",
+      "L_ENDIAN",
+      "POSIX",
+      "__SDL__",
     }
 
   local LIBMOAI_DEFINES = {
     "FT2_BUILD_LIBRARY",
     "BUILDING_LIBCURL",
 --    "USE_ARES",
-    "USE_OPENSSL",
-    "USE_SSLEAY",
-    "USE_SSL",
-    "OPENSSL_NO_GMP",
-    "OPENSSL_NO_JPAKE",
-    "OPENSSL_NO_MD2",
-    "OPENSSL_NO_RC5",
-    "OPENSSL_NO_RFC3779",
-    "OPENSSL_NO_STORE",
+--    "USE_OPENSSL",
+--    "USE_SSLEAY",
+--    "USE_SSL",
+--    "OPENSSL_NO_GMP",
+--    "OPENSSL_NO_JPAKE",
+--    "OPENSSL_NO_MD2",
+--    "OPENSSL_NO_RC5",
+--    "OPENSSL_NO_RFC3779",
+--    "OPENSSL_NO_STORE",
     "USE_UNTZ",
   }
 
@@ -137,7 +150,8 @@ solution "moai"
       "3rdparty/tinyxml",
       "3rdparty/lpng140",
       "3rdparty/c-ares-1.7.5",
-      "3rdparty/curl-7.19.7/lib",
+--      "3rdparty/curl-7.19.7/include",
+--      "3rdparty/curl-7.19.7/lib",
       "3rdparty/expat-2.0.1/lib",
       "3rdparty/freetype-2.4.4/include",
       "3rdparty/box2d-2.2.1",
@@ -160,7 +174,7 @@ solution "moai"
       "3rdparty/sfmt-1.4",
     }
     excludes {
-      "src/moaicore/MOAICp*.cpp",
+      "src/moaicore/MOAICp*.cpp",  -- chipmunk
     }
     buildoptions { "-include zlcore/zl_replace.h" }
 
@@ -176,16 +190,29 @@ solution "moai"
 
     -- platform specific settings
     configuration "osx"
+      excludes {
+        "src/moaicore/MOAIMutex_win32.cpp",
+        "src/moaicore/MOAIThread_win32.cpp",
+      }
 
     configuration "ios"
       includedirs {
-        "3rdparty/openssl-1.0.0d/include-iphone",
-        "3rdparty/curl-7.19.7/include-iphone",
+--        "3rdparty/openssl-1.0.0d/include-iphone",
+--        "3rdparty/curl-7.19.7/include-iphone",
         "3rdparty/tapjoyiOS-8.1.9/TapjoyConnect",
         "3rdparty/crittercismiOS-3.1.5/CrittercismSDK",
         "3rdparty/adcolonyiOS-197/Library",
         "3rdparty/chartboostiOS-2.9.1",
         "3rdparty/facebookiOS-3.0.6.b/src",
+      }
+
+    configuration "linux"
+      includedirs {
+--        "3rdparty/openssl-1.0.0d/include",
+      }
+      excludes {
+        "src/moaicore/MOAIMutex_win32.cpp",
+        "src/moaicore/MOAIThread_win32.cpp",
       }
 
 
@@ -209,6 +236,7 @@ solution "moai"
       "3rdparty/glew-1.5.6/include",
       "3rdparty/glew-1.5.6/src",
       "3rdparty/tlsf-2.0",
+      "3rdparty/zlib-1.2.3",
     }
 
     configuration "debug"
@@ -234,9 +262,31 @@ solution "moai"
     language "C++"
     defines (LIBMOAI_DEFINES)
     files {
-      "3rdparty/curl-7.19.7/lib/*.c",
+--      "3rdparty/curl-7.19.7/lib/*.c",
       "3rdparty/expat-2.01./lib/*.c",
-      "3rdparty/freetype-2.4.4/src/**.c",
+      "3rdparty/freetype-2.4.4/src/autofit/autofit.c",
+      "3rdparty/freetype-2.4.4/src/base/ftbase.c",
+      "3rdparty/freetype-2.4.4/src/base/ftdebug.c",
+      "3rdparty/freetype-2.4.4/src/base/ftinit.c",
+      "3rdparty/freetype-2.4.4/src/base/ftsystem.c",
+      "3rdparty/freetype-2.4.4/src/bdf/bdf.c",
+      "3rdparty/freetype-2.4.4/src/cache/ftcache*.c",
+      "3rdparty/freetype-2.4.4/src/cid/type1cid.c",
+      "3rdparty/freetype-2.4.4/src/cff/cff.c",
+      "3rdparty/freetype-2.4.4/src/gzip/ftgzip.c",
+      "3rdparty/freetype-2.4.4/src/lzw/ftlzw.c",
+      "3rdparty/freetype-2.4.4/src/pcf/pcf.c",
+      "3rdparty/freetype-2.4.4/src/pfr/pfr.c",
+      "3rdparty/freetype-2.4.4/src/psaux/psaux.c",
+      "3rdparty/freetype-2.4.4/src/pshinter/pshinter.c",
+      "3rdparty/freetype-2.4.4/src/psnames/psmodule.c",
+      "3rdparty/freetype-2.4.4/src/raster/raster.c",
+      "3rdparty/freetype-2.4.4/src/sfnt/sfnt.c",
+      "3rdparty/freetype-2.4.4/src/smooth/smooth.c",
+      "3rdparty/freetype-2.4.4/src/truetype/truetype.c",
+      "3rdparty/freetype-2.4.4/src/type1/type1.c",
+      "3rdparty/freetype-2.4.4/src/type42/type42.c",
+      "3rdparty/freetype-2.4.4/src/winfonts/winfnt.c",
       "3rdparty/lpng140/*.c",
       "3rdparty/tinyxml/tinyxml.cpp",
       "3rdparty/tinyxml/tinyxmlerror.cpp",
@@ -261,25 +311,27 @@ solution "moai"
       "3rdparty/zlib-1.2.3/*.c",
       "3rdparty/contrib/whirlpool.c",
       "3rdparty/contrib/utf8.c",
-      "3rdparty/sfmt-1.4/sfmt.c",
+      "3rdparty/sfmt-1.4/SFMT.c",
     }
     excludes {
-      "3rdparty/curl-7.19.7/lib/amigaos.c",
-      "3rdparty/freetype-2.4.4/src/gzip/*",
-      "3rdparty/freetype-2.4.4/src/autofit/aflatin2.c",
+--      "3rdparty/curl-7.19.7/lib/amigaos.c",
+      "3rdparty/freetype-2.4.4/src/base/ftmac.c",
       "3rdparty/lpng140/example.c",
       "3rdparty/zlib-1.2.3/example.c",
       "3rdparty/zlib-1.2.3/minigzip.c",
     }
     includedirs {
       "src",
-      "3rdparty/curl-7.19.7/include-iphone",
-      "3rdparty/curl-7.19.7/lib",
+--      "3rdparty/curl-7.19.7/include-iphone",
+--      "3rdparty/curl-7.19.7/lib",
       "3rdparty",
       "3rdparty/expat-2.0.1/lib",
       "3rdparty/freetype-2.4.4/include",
       "3rdparty/jansson-2.1/src",
       "3rdparty/jpeg-8c",
+      "3rdparty/lua-5.1.3/src",
+      "3rdparty/sqlite-3.6.16",
+      "3rdparty/zlib-1.2.3",
     }
     buildoptions {
       "-std=c99",
@@ -298,6 +350,14 @@ solution "moai"
     configuration "osx"
 
     configuration "ios"
+
+    configuration "linux"
+      defines {
+        "SQLITE_HOMEGROWN_RECURSIVE_MUTEX"
+      }
+      excludes {
+        "3rdparty/freetype-2.4.4/src/winfonts/*.c",
+      }
 
 
 ------------------------------------------------------------------------------
@@ -352,16 +412,28 @@ solution "moai"
       "src/config",
       "src/moaiext-untz",
       "3rdparty",
+      "3rdparty/box2d-2.2.1",
+      "3rdparty/expat-2.0.1/lib",
       "3rdparty/untz/include",
       "3rdparty/untz/src",
       "3rdparty/libogg-1.2.2/include",
       "3rdparty/libvorbis-1.3.2/include",
       "3rdparty/libvorbis-1.3.2/lib",
+      "3rdparty/lua-5.1.3/src",
       "3rdparty/tinyxml",
       "3rdparty/freetype-2.4.4/include",
-      "3rdparty/box2d-2.2.1",
+      "3rdparty/zlib-1.2.3",
     }
     buildoptions { "-include zlcore/zl_replace.h" }
+
+    configuration "debug"
+      defines (LIBMOAI_DEBUG_DEFINES)
+      targetdir (OUT_PATH .. "/debug/lib")
+--      targetsuffix "-d"
+
+    configuration "release"
+      defines (LIBMOAI_RELEASE_DEFINES)
+      targetdir (OUT_PATH .. "/release/lib")
 
     configuration "osx or ios"
       files {
@@ -379,15 +451,13 @@ solution "moai"
         "3rdparty/untz/src/native/win",
       }
 
-    configuration "debug"
-      defines (LIBMOAI_DEBUG_DEFINES)
-      targetdir (OUT_PATH .. "/debug/lib")
---      targetsuffix "-d"
-
-    configuration "release"
-      defines (LIBMOAI_RELEASE_DEFINES)
-      targetdir (OUT_PATH .. "/release/lib")
-
+    configuration "linux"
+      files {
+        "3rdparty/untz/src/native/sdl/*.cpp",
+      }
+      includedirs {
+        "3rdparty/untz/src/native/sdl",
+      }
 
   ------------------------------------------------------------------------------
   project "host"
@@ -402,7 +472,6 @@ solution "moai"
       "src/hosts/GlutHost.cpp",
       "src/hosts/GlutHostMain.cpp",
       "src/hosts/ParticlePresets.cpp",
-      "src/hosts/FolderWatcher-mac.mm",
     }
     includedirs {
       "src",
@@ -426,6 +495,9 @@ solution "moai"
     -- platform specific settings
     configuration "osx"
       targetname "moai-osx"
+      files {
+        "src/hosts/FolderWatcher-mac.mm",
+      }
       buildoptions {
         "-F\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/System/Library/Frameworks\"",
       }
@@ -447,8 +519,8 @@ solution "moai"
 
     configuration { "osx", "release" }
       postbuildcommands {
-        "mkdir ../../bin 2>/dev/null; true",
-        "cp " .. cfg.targetdir .. "/moai-osx ../../bin/"
+        "@mkdir ../../bin 2>/dev/null; true",
+        "@cp " .. cfg.targetdir .. "/moai-osx ../../bin/"
       }
 
     configuration "ios"
@@ -456,8 +528,23 @@ solution "moai"
 
     configuration { "ios", "release" }
       postbuildcommands {
-        "mkdir ../../bin 2>/dev/null; true",
-        "cp " .. cfg.targetdir .. "/moai-ios ../../bin/"
+        "@mkdir ../../bin 2>/dev/null; true",
+        "@cp " .. cfg.targetdir .. "/moai-ios ../../bin/"
+      }
+
+    configuration "linux"
+      targetname "moai-linux"
+      linkoptions {
+        "-L/usr/lib/i386-linux-gnu",
+        "-lSDL",
+        "-lSDL_sound",
+        "-lglut",
+      }
+
+    configuration { "linux", "release" }
+      postbuildcommands {
+        "@mkdir ../../bin 2>/dev/null; true",
+        "@cp " .. cfg.targetdir .. "/moai-linux ../../bin/"
       }
 
   ------------------------------------------------------------------------------
