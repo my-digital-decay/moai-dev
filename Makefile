@@ -16,16 +16,21 @@ premake-osx: premake4.lua
 
 osx-debug:
 	@${MAKE} premake-osx
-	@${MAKE} -C build/gmake-osx config=debug32
+	@${MAKE} -C build/gmake-osx host-glfw config=debug32
 .PHONY: osx-debug
 
 osx-release:
 	@${MAKE} premake-osx
-	@${MAKE} -C build/gmake-osx config=release32
+	@${MAKE} -C build/gmake-osx host-glfw config=release32
 .PHONY: osx-release
 
 osx: osx-debug osx-release
 .PHONY: osx
+
+clean-osx:
+	@test -d build/gmake-osx && ${MAKE} -C build/gmake-osx clean; true
+	@test -d out/osx && rm -r out/osx; true
+.PHONY: clean-osx
 
 
 #
@@ -50,6 +55,12 @@ ios-release:
 ios: ios-debug ios-release
 .PHONY: ios
 
+clean-ios:
+	@test -d build/gmake-ios && ${MAKE} -C build/gmake-ios clean; true
+	@test -d out/ios && rm -r out/ios; true
+.PHONY: clean-ios
+
+
 #
 # Linux
 #
@@ -61,17 +72,21 @@ premake-linux: premake4.lua
 
 linux-debug:
 	@${MAKE} premake-linux
-	@${MAKE} -C build/gmake-linux config=debug32
+	@${MAKE} -C build/gmake-linux host-glfw config=debug32
 .PHONY: linux-debug
 
 linux-release:
 	@${MAKE} premake-linux
-	@${MAKE} -C build/gmake-linux config=release32
+	@${MAKE} -C build/gmake-linux host-glfw config=release32
 .PHONY: linux-release
 
 linux: linux-debug linux-release
 .PHONY: linux
 
+clean-linux:
+	@test -d build/gmake-linux && ${MAKE} -C build/gmake-linux clean; true
+	@test -d out/linux && rm -r out/linux; true
+.PHONY: clean-linux
 
 clean:
 	@test -d build/gmake-osx && ${MAKE} -C build/gmake-osx clean; true
