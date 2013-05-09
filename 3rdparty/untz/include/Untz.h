@@ -24,11 +24,7 @@ typedef char Int8;
 typedef unsigned long ULong;
 
 #if defined(__APPLE__)
-    #if defined(MACOSX)
-        #include <Carbon/Carbon.h>
-    #else
-        #include <MacTypes.h>
-    #endif
+    #include <MacTypes.h>
 #else
     typedef unsigned int UInt32;
     typedef signed short SInt16;
