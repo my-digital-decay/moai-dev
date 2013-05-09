@@ -59,6 +59,7 @@ solution "moai"
     "NoRTTI",
     "NoExceptions",
     "NoEditAndContinue",
+--    "FloatFast",
   }
 
   -- clean configuration to start
@@ -70,6 +71,12 @@ solution "moai"
       "SQLITE_ENABLE_COLUMN_METADATA",
       "SQLITE_ENABLE_FTS3",
       "SQLITE_ENABLE_FTS3_PARENTHESIS",
+    }
+    buildoptions {
+--      "-nostdinc",
+    }
+    linkoptions {
+      "-nodefaultlibs",
     }
 
   configuration "debug"
@@ -91,14 +98,28 @@ solution "moai"
     }
 
   configuration "osx"
+    flags {
+      "EnableSSE2"
+    }
     defines {
       "MACOSX",
       "DARWIN_NO_CARBON",
       "POSIX",
       "L_ENDIAN",
     }
+    buildoptions {
+      "-F\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/System/Library/Frameworks\"",
+      "-I\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/usr/include\"",
+    }
+    linkoptions {
+      "-F\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/System/Library/Frameworks\"",
+      "-L\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/usr/lib\"",
+    }
 
   configuration "linux"
+    flags {
+      "EnableSSE2"
+    }
     defines {
       "LINUX",
       "L_ENDIAN",
@@ -108,7 +129,7 @@ solution "moai"
 
   local LIBMOAI_DEFINES = {
     "FT2_BUILD_LIBRARY",
-    "BUILDING_LIBCURL",
+--    "BUILDING_LIBCURL",
 --    "USE_ARES",
 --    "USE_OPENSSL",
 --    "USE_SSLEAY",
@@ -130,6 +151,10 @@ solution "moai"
   local LIBMOAI_RELEASE_DEFINES = {
   }
 
+
+  ------------------------------------------------------------------------------
+  -- @section MOAI Libs
+
   ------------------------------------------------------------------------------
   project "libmoai-core"
     targetname "moai-core"
@@ -137,8 +162,7 @@ solution "moai"
     language "C++"
     defines (LIBMOAI_DEFINES)
     files {
-      "src/moaicore/**.cpp",
-      "src/uslscore/**.cpp",
+      "src/moai-core/*.cpp",
       "3rdparty/luasocket-2.0.2-embed/*.c"
     }
     includedirs {
@@ -148,7 +172,7 @@ solution "moai"
       "3rdparty/lua-5.1.3/src",
       "3rdparty/contrib",
       "3rdparty/tinyxml",
-      "3rdparty/lpng140",
+--      "3rdparty/lpng140",
       "3rdparty/c-ares-1.7.5",
 --      "3rdparty/curl-7.19.7/include",
 --      "3rdparty/curl-7.19.7/lib",
@@ -163,7 +187,7 @@ solution "moai"
       "3rdparty/luasql-2.2.0/src",
       "3rdparty/libogg-1.2.2/include",
       "3rdparty/jansson-2.1/src",
-      "3rdparty/jpeg-8c",
+--      "3rdparty/jpeg-8c",
       "3rdparty/untz/include",
       "3rdparty/untz/src",
       "3rdparty/libvorbis-1.3.2/lib",
@@ -174,9 +198,57 @@ solution "moai"
       "3rdparty/sfmt-1.4",
     }
     excludes {
-      "src/moaicore/MOAICp*.cpp",  -- chipmunk
+      "src/moai-core/MOAIFoo*.cpp",  -- Foo sample
     }
-    buildoptions { "-include zlcore/zl_replace.h" }
+    buildoptions { "-include zl-vfs/zl_replace.h" }
+
+    -- cross-platform configuration specific settings
+    configuration "debug"
+      defines (LIBMOAI_DEBUG_DEFINES)
+      targetdir (OUT_PATH .. "/debug/lib")
+--      targetsuffix "-d"
+
+    configuration "release"
+      defines (LIBMOAI_RELEASE_DEFINES)
+      targetdir (OUT_PATH .. "/release/lib")
+
+    -- platform specific settings
+    configuration "osx"
+
+    configuration "ios"
+      includedirs {
+--        "3rdparty/openssl-1.0.0d/include-iphone",
+--        "3rdparty/curl-7.19.7/include-iphone",
+        "3rdparty/tapjoyiOS-8.1.9/TapjoyConnect",
+        "3rdparty/crittercismiOS-3.1.5/CrittercismSDK",
+        "3rdparty/adcolonyiOS-197/Library",
+        "3rdparty/chartboostiOS-2.9.1",
+        "3rdparty/facebookiOS-3.0.6.b/src",
+      }
+
+    configuration "linux"
+      includedirs {
+--        "3rdparty/openssl-1.0.0d/include",
+      }
+
+  ------------------------------------------------------------------------------
+  project "libmoai-util"
+    targetname "moai-util"
+    kind "StaticLib"
+    language "C++"
+    defines (LIBMOAI_DEFINES)
+    files {
+      "src/moai-util/*.cpp",
+    }
+    includedirs {
+      "src",
+      "src/config",
+      "3rdparty",
+      "3rdparty/jansson-2.1/src",
+      "3rdparty/sfmt-1.4",
+      "3rdparty/tinyxml",
+    }
+    buildoptions { "-include zl-vfs/zl_replace.h" }
 
     -- cross-platform configuration specific settings
     configuration "debug"
@@ -213,45 +285,6 @@ solution "moai"
       excludes {
         "src/moaicore/MOAIMutex_win32.cpp",
         "src/moaicore/MOAIThread_win32.cpp",
-      }
-
-
-  ------------------------------------------------------------------------------
-  project "libmoai-zlcore"
-    targetname "moai-zlcore"
-    kind "StaticLib"
-    language "C++"
-    files {
-      "src/zlcore/*.cpp",
-      "3rdparty/glew-1.5.6/src/glew.c",
-    }
-    excludes {
-      "src/zlcore/zl_gfx_dummy.cpp",
-      "src/zlcore/zl_gfx_flascc.cpp",
-    }
-    includedirs {
-      "src",
-      "src/config",
-      "3rdparty",
-      "3rdparty/glew-1.5.6/include",
-      "3rdparty/glew-1.5.6/src",
-      "3rdparty/tlsf-2.0",
-      "3rdparty/zlib-1.2.3",
-    }
-
-    configuration "debug"
-      targetdir (OUT_PATH .. "/debug/lib")
---      targetsuffix "-d"
-
-    configuration "release"
-      targetdir (OUT_PATH .. "/release/lib")
-
-    configuration "osx or ios"
-      files {
-        "src/zlcore/zl_gfx_opengl.cpp",
-      }
-      buildoptions {
-        "-F\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/System/Library/Frameworks\"",
       }
 
 
@@ -296,6 +329,7 @@ solution "moai"
       "3rdparty/sqlite-3.6.16/sqlite3.c",
       "3rdparty/jansson-2.1/src/*.c",
       "3rdparty/lua-5.1.3/src/*.c",
+--[[
       "3rdparty/jpeg-8c/jaricom.c",
       "3rdparty/jpeg-8c/jc*.c",
       "3rdparty/jpeg-8c/jd*.c",
@@ -307,6 +341,7 @@ solution "moai"
       "3rdparty/jpeg-8c/jquant1.c",
       "3rdparty/jpeg-8c/jquant2.c",
       "3rdparty/jpeg-8c/jutils.c",
+--]]
       "3rdparty/tlsf-2.0/tlsf.c",
       "3rdparty/zlib-1.2.3/*.c",
       "3rdparty/contrib/whirlpool.c",
@@ -328,14 +363,14 @@ solution "moai"
       "3rdparty/expat-2.0.1/lib",
       "3rdparty/freetype-2.4.4/include",
       "3rdparty/jansson-2.1/src",
-      "3rdparty/jpeg-8c",
+--      "3rdparty/jpeg-8c",
       "3rdparty/lua-5.1.3/src",
       "3rdparty/sqlite-3.6.16",
       "3rdparty/zlib-1.2.3",
     }
     buildoptions {
       "-std=c99",
-      "-include zlcore/zl_replace.h",
+--      "-include zl-vfs/zl_replace.h",
     }
 
     configuration "debug"
@@ -360,25 +395,25 @@ solution "moai"
       }
 
 
-------------------------------------------------------------------------------
-  project "libmoai-physics"
-    targetname "moai-physics"
+  ------------------------------------------------------------------------------
+  project "libmoai-box2d"
+    targetname "moai-box2d"
     kind "StaticLib"
     language "C++"
     defines (LIBMOAI_DEFINES)
     files {
+      "src/moai-box2d/*.cpp",
       "3rdparty/box2d-2.2.1/Box2D/**.cpp",
---      "3rdparty/chipmunk-5.3.4/src/*.c",
---      "3rdparty/chipmunk-5.3.4/src/constraints/*.c",
     }
     includedirs {
       "src",
+      "src/config",
       "3rdparty",
       "3rdparty/box2d-2.2.1",
---      "3rdparty/chipmunk-5.3.4/include",
---      "3rdparty/chipmunk-5.3.4/include/chipmunk",
+      "3rdparty/tinyxml", -- dependency ??
+      "3rdparty/freetype-2.4.4/include", -- remove dependency
     }
-    buildoptions { "-include zlcore/zl_replace.h" }
+    buildoptions { "-include zl-vfs/zl_replace.h" }
 
     configuration "debug"
       defines (LIBMOAI_DEBUG_DEFINES)
@@ -390,14 +425,14 @@ solution "moai"
       targetdir (OUT_PATH .. "/release/lib")
 
 
-------------------------------------------------------------------------------
-  project "libmoai-audio"
-    targetname "moai-audio"
+  ------------------------------------------------------------------------------
+  project "libmoai-untz"
+    targetname "moai-untz"
     kind "StaticLib"
     language "C++"
     defines (LIBMOAI_DEFINES)
     files {
-      "src/moaiext-untz/*.cpp",
+      "src/moai-untz/*.cpp",
       "3rdparty/untz/src/*.cpp",
       "3rdparty/libogg-1.2.2/src/*.c",
       "3rdparty/libvorbis-1.3.2/lib/*.c",
@@ -410,21 +445,16 @@ solution "moai"
     includedirs {
       "src",
       "src/config",
-      "src/moaiext-untz",
       "3rdparty",
-      "3rdparty/box2d-2.2.1",
-      "3rdparty/expat-2.0.1/lib",
       "3rdparty/untz/include",
       "3rdparty/untz/src",
       "3rdparty/libogg-1.2.2/include",
       "3rdparty/libvorbis-1.3.2/include",
       "3rdparty/libvorbis-1.3.2/lib",
-      "3rdparty/lua-5.1.3/src",
-      "3rdparty/tinyxml",
-      "3rdparty/freetype-2.4.4/include",
-      "3rdparty/zlib-1.2.3",
+      "3rdparty/tinyxml", -- dependency ??
+      "3rdparty/freetype-2.4.4/include", -- remove dependency
     }
-    buildoptions { "-include zlcore/zl_replace.h" }
+    buildoptions { "-include zl-vfs/zl_replace.h" }
 
     configuration "debug"
       defines (LIBMOAI_DEBUG_DEFINES)
@@ -460,7 +490,143 @@ solution "moai"
       }
 
   ------------------------------------------------------------------------------
-  project "host"
+  project "libmoai-sim"
+    targetname "moai-sim"
+    kind "StaticLib"
+    language "C++"
+    defines (LIBMOAI_DEFINES)
+    files {
+      "src/moai-sim/*.cpp",
+    }
+    includedirs {
+      "src",
+      "src/config",
+      "3rdparty",
+      "3rdparty/box2d-2.2.1",
+      "3rdparty/lpng140",
+      "3rdparty/tinyxml", -- dependency ??
+      "3rdparty/freetype-2.4.4/include",
+    }
+    buildoptions { "-include zl-vfs/zl_replace.h" }
+
+    configuration "debug"
+      defines (LIBMOAI_DEBUG_DEFINES)
+      targetdir (OUT_PATH .. "/debug/lib")
+--      targetsuffix "-d"
+
+    configuration "release"
+      defines (LIBMOAI_RELEASE_DEFINES)
+      targetdir (OUT_PATH .. "/release/lib")
+
+  ------------------------------------------------------------------------------
+  -- @section ZL
+
+  ------------------------------------------------------------------------------
+  project "libzl-gfx"
+    targetname "zl-gfx"
+    kind "StaticLib"
+    language "C++"
+    files {
+      "src/zl-gfx/pch.cpp",
+      "3rdparty/glew-1.5.6/src/glew.c",
+    }
+    includedirs {
+      "src",
+      "src/config",
+      "3rdparty",
+      "3rdparty/glew-1.5.6/include",
+      "3rdparty/glew-1.5.6/src",
+--      "3rdparty/tlsf-2.0",
+--      "3rdparty/zlib-1.2.3",
+    }
+
+    configuration "debug"
+      targetdir (OUT_PATH .. "/debug/lib")
+--      targetsuffix "-d"
+
+    configuration "release"
+      targetdir (OUT_PATH .. "/release/lib")
+
+    configuration "osx"
+      files {
+        "src/zl-gfx/zl_gfx_opengl.cpp",
+      }
+
+    configuration "ios"
+      files {
+        "src/zl-gfx/zl_gfx_opengl.cpp",
+      }
+
+    configuration "linux"
+      files {
+        "src/zl-gfx/zl_gfx_opengl.cpp",
+      }
+
+
+  ------------------------------------------------------------------------------
+  project "libzl-util"
+    targetname "zl-util"
+    kind "StaticLib"
+    language "C++"
+    files {
+      "src/zl-util/*.cpp",
+    }
+    includedirs {
+      "src",
+      "src/config",
+      "3rdparty",
+      "3rdparty/ooid-0.99",
+--      "3rdparty/tlsf-2.0",
+--      "3rdparty/zlib-1.2.3",
+    }
+
+    configuration "debug"
+      targetdir (OUT_PATH .. "/debug/lib")
+--      targetsuffix "-d"
+
+    configuration "release"
+      targetdir (OUT_PATH .. "/release/lib")
+
+    configuration "not windows"
+      excludes {
+        "src/zl-util/ZLUnique_win32.cpp",
+      }
+
+    configuration "windows"
+      excludes {
+        "src/zl-util/ZLUnique_linux.cpp",
+      }
+
+
+  ------------------------------------------------------------------------------
+  project "libzl-vfs"
+    targetname "zl-vfs"
+    kind "StaticLib"
+    language "C++"
+    files {
+      "src/zl-vfs/*.cpp",
+    }
+    includedirs {
+      "src",
+      "src/config",
+      "3rdparty",
+      "3rdparty/tlsf-2.0",
+--      "3rdparty/zlib-1.2.3",
+    }
+
+    configuration "debug"
+      targetdir (OUT_PATH .. "/debug/lib")
+--      targetsuffix "-d"
+
+    configuration "release"
+      targetdir (OUT_PATH .. "/release/lib")
+
+
+  ------------------------------------------------------------------------------
+  -- @section Hosts
+
+  ------------------------------------------------------------------------------
+  project "glut-host"
     kind "ConsoleApp"
     language "C++"
     defines {
@@ -469,20 +635,25 @@ solution "moai"
       "GLUTHOST_USE_UNTZ",
     }
     files {
-      "src/hosts/GlutHost.cpp",
-      "src/hosts/GlutHostMain.cpp",
-      "src/hosts/ParticlePresets.cpp",
+      "src/host-glut/GlutHost.cpp",
+      "src/host-glut/GlutHostMain.cpp",
+      "src/host-glut/ParticlePresets.cpp",
     }
     includedirs {
       "src",
-      "src/hosts"
+      "src/config",
+      "src/host-glut"
     }
     links {
       "libmoai-core",
-      "libmoai-zlcore",
+      "libmoai-util",
       "libmoai-3rdparty",
-      "libmoai-physics",
-      "libmoai-audio",
+      "libmoai-box2d",
+      "libmoai-untz",
+      "libmoai-sim",
+      "libzl-gfx",
+      "libzl-util",
+      "libzl-vfs",
     }
 
     -- cross-platform configuration specific settings
@@ -495,18 +666,14 @@ solution "moai"
     -- platform specific settings
     configuration "osx"
       targetname "moai-osx"
-      files {
-        "src/hosts/FolderWatcher-mac.mm",
-      }
-      buildoptions {
-        "-F\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/System/Library/Frameworks\"",
-      }
+--      files {
+--        "src/host-glut/FolderWatcher-mac.mm",
+--      }
       linkoptions {
-        "-F\"" .. DEV_PATH .. "/SDKs/MacOSX10.8.sdk/System/Library/Frameworks\"",
-        "-framework System",
+--        "-framework System",
         "-framework AudioToolbox",
         "-framework AudioUnit",
-        "-framework Carbon",
+--        "-framework Carbon",
         "-framework CoreServices",
         "-framework CoreFoundation",
         "-framework Foundation",
@@ -514,7 +681,9 @@ solution "moai"
         "-framework GLUT",
         "-framework OpenGL",
         "-lssl",
-        "-lcrypto"
+        "-lcrypto",
+        "-lstdc++",
+        "-lc",
       }
 
     configuration { "osx", "release" }
