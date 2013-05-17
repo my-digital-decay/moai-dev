@@ -154,7 +154,9 @@ public class Moai {
 	protected static native void 	AKUExtLoadLuasql				();
 	protected static native void 	AKUFinalize 					();
 	protected static native void 	AKUFMODExInit		 			();
-	protected static native void 	AKUInit 						();
+	protected static native void 	AKUInitializeSim 				();
+	protected static native void 	AKUFinalizeSim		 			();
+	protected static native void 	AKUInitializeAndroid 			();
 	protected static native void 	AKUMountVirtualDirectory 		( String virtualPath, String archive );
 	protected static native void 	AKUPause 						( boolean paused );
 	protected static native void 	AKURender	 					();
@@ -175,7 +177,7 @@ public class Moai {
 	protected static native void    AKUSetScreenDpi                         ( int dpi );
 	protected static native void 	AKUSetViewSize					( int width, int height );
 	protected static native void 	AKUSetWorkingDirectory 			( String path );
-	protected static native void 	AKUUntzInit			 			();
+	protected static native void 	AKUInitializeUntz	 			();
 	protected static native void 	AKUUpdate				 		();
 
 	//----------------------------------------------------------------//
@@ -275,6 +277,7 @@ public class Moai {
 		
 		synchronized ( sAkuLock ) {
 			AKUFinalize ();
+			AKUFinalizeSim ();
 		}
 	}
 
@@ -288,6 +291,8 @@ public class Moai {
 	public static void init () {
 		
 		synchronized ( sAkuLock ) {
+
+			AKUInitializeSim ();
 
 			AKUSetInputConfigurationName 	( "Android" );
 
@@ -305,7 +310,7 @@ public class Moai {
 			AKUExtLoadLuacrypto ();
 			AKUExtLoadLuasocket ();
 
-			AKUInit ();
+			AKUInitializeAndroid ();
 		
 			// This AKU call will exist even if FMOD has been disabled in libmoai.so, so it's
 			// safe to call unconditionally.
@@ -313,7 +318,7 @@ public class Moai {
 		
 			// This AKU call will exist even if UNTZ has been disabled in libmoai.so, so it's
 			// safe to call unconditionally.
-			AKUUntzInit ();
+			AKUInitializeUntz ();
 		
 			String appId = sActivity.getPackageName ();
 		

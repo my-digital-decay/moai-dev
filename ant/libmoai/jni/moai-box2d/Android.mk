@@ -6,11 +6,12 @@
 
 	include $(CLEAR_VARS)
 
-	LOCAL_MODULE 		:= box2D
+	LOCAL_MODULE 		:= moai-box2D
 	LOCAL_ARM_MODE 		:= $(MY_ARM_MODE)
-	LOCAL_CFLAGS		:= -include $(MY_MOAI_ROOT)/src/zlcore/zl_replace.h
+	LOCAL_CFLAGS		:= -include $(MY_MOAI_ROOT)/src/zl-vfs/zl_replace.h
 
 	LOCAL_C_INCLUDES 	:= $(MY_HEADER_SEARCH_PATHS)
+	LOCAL_SRC_FILES 	+= $(wildcard $(MY_MOAI_ROOT)/src/moai-box2d/*.cpp) 
 	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/box2d-2.2.1/Box2D/Collision/Shapes/b2ChainShape.cpp
 	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/box2d-2.2.1/Box2D/Collision/Shapes/b2CircleShape.cpp
 	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/box2d-2.2.1/Box2D/Collision/Shapes/b2EdgeShape.cpp

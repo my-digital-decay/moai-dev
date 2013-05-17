@@ -56,11 +56,8 @@
 	
 	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)
 	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src
-	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/aku
-	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/config-default
-	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/moaicore
-	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/uslscore
-	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/zlcore
+	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/config
+	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/zl-common
 	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/3rdparty
 	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/3rdparty/box2d-2.2.1/
 	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/3rdparty/box2d-2.2.1/Box2D
@@ -105,12 +102,10 @@
 	MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/3rdparty/3rdparty/zlib-1.2.3
 
 	ifeq ($(USE_FMOD),true)
-		MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/moaiext-fmod-ex
 		MY_HEADER_SEARCH_PATHS += $(FMOD_ANDROID_SDK_ROOT)/api/inc
 	endif
 
 	ifeq ($(USE_UNTZ),true)
-		MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/src/moaiext-untz
 		MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/3rdparty/untz/include
 		MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/3rdparty/untz/src
 		MY_HEADER_SEARCH_PATHS += $(MY_MOAI_ROOT)/3rdparty/untz/src/native/android
@@ -130,27 +125,25 @@
 # libraries
 #----------------------------------------------------------------#
 
-	LOCAL_STATIC_LIBRARIES += libaku
-	LOCAL_STATIC_LIBRARIES += libmoaicore
-	LOCAL_STATIC_LIBRARIES += libuslscore
-
-	LOCAL_STATIC_LIBRARIES += libmoaiext-android
-	LOCAL_STATIC_LIBRARIES += libmoaiext-luaext
+	LOCAL_STATIC_LIBRARIES += libmoai-sim
+	LOCAL_STATIC_LIBRARIES += libmoai-core
+	LOCAL_STATIC_LIBRARIES += libmoai-util
+	LOCAL_STATIC_LIBRARIES += libmoai-android
+	LOCAL_STATIC_LIBRARIES += libmoai-box2D
+	LOCAL_STATIC_LIBRARIES += libmoai-chipmunk
+	LOCAL_STATIC_LIBRARIES += libmoai-luaext
 
 	ifeq ($(USE_FMOD),true)
-		LOCAL_STATIC_LIBRARIES += libmoaiext-fmod-ex
+		LOCAL_STATIC_LIBRARIES += libmoai-fmod-ex
 	endif
 
 	ifeq ($(USE_UNTZ),true)
-		LOCAL_STATIC_LIBRARIES += libmoaiext-untz
+		LOCAL_STATIC_LIBRARIES += libmoai-untz
 		LOCAL_STATIC_LIBRARIES += libvorbis
 		LOCAL_STATIC_LIBRARIES += libogg
 	endif
 
-	LOCAL_STATIC_LIBRARIES += libbox2D
 	LOCAL_STATIC_LIBRARIES += libcares
-	LOCAL_STATIC_LIBRARIES += libchipmunk
-	LOCAL_STATIC_LIBRARIES += libcontrib
 	LOCAL_STATIC_LIBRARIES += libcurl
 	LOCAL_STATIC_LIBRARIES += libexpat
 	LOCAL_STATIC_LIBRARIES += libfreetype
@@ -162,7 +155,9 @@
 	LOCAL_STATIC_LIBRARIES += libsqlite
 	LOCAL_STATIC_LIBRARIES += libssl
 	LOCAL_STATIC_LIBRARIES += libtinyxml
-	LOCAL_STATIC_LIBRARIES += libzlcore
+	LOCAL_STATIC_LIBRARIES += libzl-gfx
+	LOCAL_STATIC_LIBRARIES += libzl-util
+	LOCAL_STATIC_LIBRARIES += libzl-vfs
 
 	include $(BUILD_SHARED_LIBRARY)
 
@@ -170,25 +165,24 @@
 # include submodules
 #----------------------------------------------------------------#
 
-	include box2d/Android.mk
 	include c-ares/Android.mk
-	include chipmunk/Android.mk
-	include contrib/Android.mk
 	include curl/Android.mk
 	include expat/Android.mk
 	include freetype/Android.mk
 	include jpg/Android.mk
 	include json/Android.mk
 	include lua/Android.mk
-	include moaiext-android/Android.mk
-	include moaiext-luaext/Android.mk
+	include moai-android/Android.mk
+	include moai-box2d/Android.mk
+	include moai-chipmunk/Android.mk
+	include moai-luaext/Android.mk
 	
 	ifeq ($(USE_FMOD),true)
-		include moaiext-fmod-ex/Android.mk
+		include moai-fmod-ex/Android.mk
 	endif
 	
 	ifeq ($(USE_UNTZ),true)
-		include moaiext-untz/Android.mk
+		include moai-untz/Android.mk
 		include vorbis/Android.mk
 		include ogg/Android.mk
 	endif
@@ -198,8 +192,11 @@
 	include sqlite/Android.mk
 	include ssl/Android.mk
 	include tinyxml/Android.mk
-	include zlcore/Android.mk
 
-	include aku/Android.mk
-	include moaicore/Android.mk
-	include uslscore/Android.mk
+	include zl-gfx/Android.mk
+	include zl-util/Android.mk
+	include zl-vfs/Android.mk
+
+	include moai-util/Android.mk
+	include moai-core/Android.mk
+	include moai-sim/Android.mk

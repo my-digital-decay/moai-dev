@@ -7,22 +7,24 @@
 #include <math.h>
 #include <string.h>
 
-#include <moaicore/moaicore.h>
+#include <moai-core/host.h>
+#include <moai-sim/headers.h>
+#include <moai-sim/host.h>
+#include <moai-util/host.h>
 
 #include <lua-headers/moai_lua.h>
 
-#include <moaiext-android/moaiext-android.h>
-#include <moaiext-android/moaiext-jni.h>
+#include <moai-android/headers.h>
+#include <moai-android/jni.h>
 
-#include <aku/AKU.h>
-#include <aku/AKU-luaext.h>
+#include <moai-luaext/host.h>
 
-#ifdef USE_FMOD
-#include <aku/AKU-fmod-ex.h>
+#if MOAI_WITH_FMOD_EX
+#include <moai-fmod-ex/host.h>
 #endif
 
-#ifdef USE_UNTZ
-#include <aku/AKU-untz.h>
+#if MOAI_WITH_UNTZ
+#include <moai-untz/host.h>
 #endif
 
 //================================================================//
@@ -271,13 +273,27 @@
 	//----------------------------------------------------------------//
 	extern "C" void Java_com_ziplinegames_moai_Moai_AKUFMODExInit ( JNIEnv* env, jclass obj ) {
 
-#ifdef USE_FMOD
+#if MOAI_WITH_FMOD_EX
 		AKUFmodExInit ();
 #endif
 	}
 
 	//----------------------------------------------------------------//
-	extern "C" void Java_com_ziplinegames_moai_Moai_AKUInit ( JNIEnv* env, jclass obj ) {
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUInitializeSim ( JNIEnv* env, jclass obj ) {
+
+        AKUInitializeUtil ();
+        AKUInitializeSim ();
+    }
+
+	//----------------------------------------------------------------//
+    extern "C" void Java_com_ziplinegames_moai_Moai_AKUFinalizeSim ( JNIEnv* env, jclass obj ) {
+
+        AKUFinalizeSim ();
+        AKUFinalizeUtil ();
+    }
+
+	//----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUInitializeAndroid ( JNIEnv* env, jclass obj ) {
 
 		MOAIAppAndroid::Affirm ();
 		REGISTER_LUA_CLASS ( MOAIAppAndroid );
@@ -360,12 +376,12 @@
 
 		if ( paused ) {
 		
-#ifdef USE_UNTZ
+#if MOAI_WITH_UNTZ
 			AKUUntzSuspend ();
 #endif
 		} else {
 		
-#ifdef USE_UNTZ
+#if MOAI_WITH_UNTZ
 			AKUUntzResume ();
 #endif
 		}		
@@ -556,17 +572,17 @@
 
 		JNI_GET_CSTRING ( jpath, path );
 
-		USFileSys::SetCurrentPath ( path );
+		ZLFileSys::SetCurrentPath ( path );
 		MOAILuaRuntime::Get ().SetPath ( path );
 	
 		JNI_RELEASE_CSTRING ( jpath, path );
 	}
 
 	//----------------------------------------------------------------//
-	extern "C" void Java_com_ziplinegames_moai_Moai_AKUUntzInit ( JNIEnv* env, jclass obj ) {
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUInitializeUntz( JNIEnv* env, jclass obj ) {
 		
-#ifdef USE_UNTZ
-		AKUUntzInit ();
+#if MOAI_WITH_UNTZ
+		AKUInitializeUntz ();
 #endif
 	}
 	

@@ -6,13 +6,11 @@
 
 	include $(CLEAR_VARS)
 
-	LOCAL_MODULE 		:= contrib
+	LOCAL_MODULE 		:= moai-sim
 	LOCAL_ARM_MODE 		:= $(MY_ARM_MODE)
-	LOCAL_CFLAGS		:= -include $(MY_MOAI_ROOT)/src/zlcore/zl_replace.h
+	LOCAL_CFLAGS		:= -DUSE_OPENGLES1=1 -include $(MY_MOAI_ROOT)/src/zl-vfs/zl_replace.h
 
 	LOCAL_C_INCLUDES 	:= $(MY_HEADER_SEARCH_PATHS)
-	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/contrib/utf8.c
-	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/contrib/whirlpool.c
+	LOCAL_SRC_FILES 	+= $(wildcard $(MY_MOAI_ROOT)/src/moai-sim/*.cpp) 
 
 	include $(BUILD_STATIC_LIBRARY)
- 

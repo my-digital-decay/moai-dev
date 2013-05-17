@@ -6,11 +6,12 @@
 
 	include $(CLEAR_VARS)
 
-	LOCAL_MODULE 		:= moaiext-luaext
+	LOCAL_MODULE 		:= moai-luaext
 	LOCAL_ARM_MODE 		:= $(MY_ARM_MODE)
-	LOCAL_CFLAGS		:= -include $(MY_MOAI_ROOT)/src/zlcore/zl_replace.h
+	LOCAL_CFLAGS		:= -include $(MY_MOAI_ROOT)/src/zl-vfs/zl_replace.h
 
 	LOCAL_C_INCLUDES 	:= $(MY_HEADER_SEARCH_PATHS)
+	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/src/moai-luaext/host.cpp
 	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/luacrypto-0.2.0/src/lcrypto.c
 	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/luacurl-1.2.1/luacurl.c
 	LOCAL_SRC_FILES 	+= $(MY_MOAI_ROOT)/3rdparty/luafilesystem-1.5.0/src/lfs.c
