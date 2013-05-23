@@ -305,11 +305,11 @@ GLenum _remapEnum ( u32 zglEnum ) {
   		case ZGL_TEXTURE_ENV_MODE:						return GL_TEXTURE_ENV_MODE;
     #endif
     
-	#if !defined ( MOAI_OS_NACL ) && !defined ( MOAI_OS_IPHONE ) && !defined ( MOAI_OS_ANDROID )
+	#if !defined ( MOAI_OS_NACL ) && !defined ( MOAI_OS_IPHONE )  && !defined ( MOAI_OS_ANDROID )
   		case ZGL_TEXTURE_LOD_BIAS:						return GL_TEXTURE_LOD_BIAS;
-  		case ZGL_TEXTURE_MAG_FILTER:					return GL_TEXTURE_MAG_FILTER;
     #endif
     
+  		case ZGL_TEXTURE_MAG_FILTER:					return GL_TEXTURE_MAG_FILTER;
 		case ZGL_TEXTURE_MIN_FILTER:					return GL_TEXTURE_MIN_FILTER;
 
 	#if !defined ( MOAI_OS_NACL ) && !defined ( MOAI_OS_IPHONE ) && !defined ( MOAI_OS_ANDROID )
@@ -367,8 +367,6 @@ void zglInitialize () {
 	u32 majorVersion = 0;
 	u32 minorVersion = 0;
 
-	bool isOpenGLES = false;
-
 	#ifdef __GLEW_H__
 		static bool initGlew = true;
 		if ( initGlew ) {
@@ -385,7 +383,7 @@ void zglInitialize () {
 	string gles = "opengl es";
 	
 	if ( version.find ( gles ) != version.npos ) {
-		isOpenGLES = true;
+		sIsOpenGLES = true;
 		version = version.substr ( gles.length ());
 		
 		size_t space = version.find ( ' ' );
@@ -394,7 +392,7 @@ void zglInitialize () {
 		}
 	}
 	else {
-		isOpenGLES = false;
+		sIsOpenGLES = false;
 	}
 	
 	version = version.substr ( 0, 3 );
@@ -403,7 +401,7 @@ void zglInitialize () {
 	minorVersion = version.at ( 2 ) - '0';
 	
 	#ifdef __FLASH__
-		isOpenGLES = true;
+		sIsOpenGLES = true;
 		sIsProgrammable = false;
 		sIsFramebufferSupported = false;
 	#else
@@ -415,7 +413,7 @@ void zglInitialize () {
 	
 		// if framebuffer object is not in code, check to see if it's available as
 		// an extension and remap to core function pointers if so
-		if (( isOpenGLES == false ) && ( majorVersion < 3 )) {
+		if (( sIsOpenGLES == false ) && ( majorVersion < 3 )) {
 			
 			if ( glewIsSupported ( "GL_EXT_framebuffer_object" )) {
 		  
@@ -591,6 +589,8 @@ u32 zglGetCap ( u32 cap ) {
 			return sIsFramebufferSupported ? 1 : 0;
 		case ZGL_CAPS_IS_PROGRAMMABLE:
 			return sIsProgrammable ? 1 : 0;
+		case ZGL_CAPS_IS_OPENGLES:
+			return sIsOpenGLES ? 1 : 0;
 		case ZGL_CAPS_MAX_TEXTURE_SIZE:
 			return sMaxTextureSize;
 		case ZGL_CAPS_MAX_TEXTURE_UNITS:

@@ -549,6 +549,16 @@
 		JNI_RELEASE_CSTRING ( jname, name );
 	}
 
+    //----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUSetInputDeviceJoystick ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jstring jname ) {
+
+		JNI_GET_CSTRING ( jname, name );
+
+		AKUSetInputDeviceJoystick ( deviceId, sensorId, name );
+
+		JNI_RELEASE_CSTRING ( jname, name );
+	}
+
 	//----------------------------------------------------------------//
 	extern "C" void Java_com_ziplinegames_moai_Moai_AKUSetScreenDpi ( JNIEnv* env, jclass obj, jint dpi ) {
 

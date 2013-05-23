@@ -259,6 +259,7 @@ void MOAIGfxDevice::DetectContext () {
 	
 	zglInitialize ();
 	
+	this->mIsOpenGLES = zglGetCap ( ZGL_CAPS_IS_OPENGLES ) == 1;
 	this->mIsProgrammable = zglGetCap ( ZGL_CAPS_IS_PROGRAMMABLE ) == 1;
 	this->mIsFramebufferSupported = zglGetCap ( ZGL_CAPS_IS_FRAMEBUFFER_SUPPORTED ) == 1;
 	

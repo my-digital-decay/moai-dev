@@ -306,6 +306,12 @@ void AKUSetInputDeviceCompass ( int deviceID, int sensorID, char const* name ) {
 }
 
 //----------------------------------------------------------------//
+void AKUSetInputDeviceJoystick ( int deviceID, int sensorID, char const* name ) {
+
+	MOAIInputMgr::Get ().SetSensor (( u8 )deviceID, ( u8 )sensorID, name, MOAISensor::JOYSTICK );
+}
+
+//----------------------------------------------------------------//
 void AKUSetInputDeviceKeyboard ( int deviceID, int sensorID, char const* name ) {
 
 	MOAIInputMgr::Get ().SetSensor (( u8 )deviceID, ( u8 )sensorID, name, MOAISensor::KEYBOARD );
