@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # Moai Makefile
 
-all: osx ios
+all: osx
 .PHONY: all
 
 
@@ -9,9 +9,9 @@ all: osx ios
 # Mac OSX
 #
 
-premake-osx: premake4.lua
+premake-osx: premake/premake4.lua
 	@echo "Generating makefiles for osx ..."
-	@premake4 --file=./premake4.lua --gcc=osx --platform=x32 gmake
+	@premake4 --file=premake/premake4.lua --gcc=osx --platform=x32 gmake
 .PHONY: premake-osx
 
 osx-debug:
@@ -37,9 +37,9 @@ clean-osx:
 # iOS
 #
 
-premake-ios: premake4.lua
+premake-ios: premake/premake4.lua
 	@echo "Generating makefiles for ios ..."
-	@premake4 --file=./premake4.lua --gcc=ios --platform=x32 gmake
+	@premake4 --file=premake/premake4.lua --gcc=ios --platform=x32 gmake
 .PHONY: premake-ios
 
 ios-debug:
@@ -65,9 +65,9 @@ clean-ios:
 # Linux
 #
 
-premake-linux: premake4.lua
+premake-linux: premake/premake4.lua
 	@echo "Generating makefiles for linux ..."
-	@premake4 --file=./premake4.lua --gcc=linux --platform=x32 gmake
+	@premake4 --file=premake/premake4.lua --gcc=linux --platform=x32 gmake
 .PHONY: premake-ios
 
 linux-debug:
