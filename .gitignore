@@ -25,6 +25,7 @@ release
 tmp
 
 # mdd
+log/
 out/
 bin/moai*
 
