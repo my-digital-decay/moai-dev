@@ -14,6 +14,7 @@
 #include <moai-sim/MOAIPointerSensor.h>
 #include <moai-sim/MOAISensor.h>
 #include <moai-sim/MOAITouchSensor.h>
+#include <moai-sim/MOAITriggerSensor.h>
 #include <moai-sim/MOAIWheelSensor.h>
 
 #define LUAVAR_CONFIGURATION	"configuration"
@@ -48,6 +49,15 @@ void MOAIInputMgr::EnqueueCompassEvent ( u8 deviceID, u8 sensorID, float heading
 	if ( this->CheckSensor ( deviceID, sensorID, MOAISensor::COMPASS )) {
 		this->WriteEventHeader ( deviceID, sensorID, MOAISensor::COMPASS );
 		MOAICompassSensor::WriteEvent ( this->mInput, heading );
+	}
+}
+
+//----------------------------------------------------------------//
+void MOAIInputMgr::EnqueueJoystickEvent ( u8 deviceID, u8 sensorID, float x, float y ) {
+
+	if ( this->CheckSensor ( deviceID, sensorID, MOAISensor::JOYSTICK )) {
+		this->WriteEventHeader ( deviceID, sensorID, MOAISensor::JOYSTICK );
+		MOAIJoystickSensor::WriteEvent ( this->mInput, x, y );
 	}
 }
 
@@ -103,6 +113,15 @@ void MOAIInputMgr::EnqueueTouchEventCancel ( u8 deviceID, u8 sensorID ) {
 	if ( this->CheckSensor ( deviceID, sensorID, MOAISensor::TOUCH )) {
 		this->WriteEventHeader ( deviceID, sensorID, MOAISensor::TOUCH );
 		MOAITouchSensor::WriteEventCancel ( this->mInput );
+	}
+}
+
+//----------------------------------------------------------------//
+void MOAIInputMgr::EnqueueTriggerEvent ( u8 deviceID, u8 sensorID, float value ) {
+
+	if ( this->CheckSensor ( deviceID, sensorID, MOAISensor::TRIGGER )) {
+		this->WriteEventHeader ( deviceID, sensorID, MOAISensor::TRIGGER );
+		MOAITriggerSensor::WriteEvent ( this->mInput, value );
 	}
 }
 

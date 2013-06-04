@@ -31,6 +31,7 @@ public:
 		LOCATION,
 		POINTER,
 		TOUCH,
+		TRIGGER,
 		WHEEL,
 	};
 

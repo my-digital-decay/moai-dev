@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # Moai Makefile
 
-all: osx
+default: osx
 .PHONY: all
 
 
@@ -34,31 +34,26 @@ clean-osx:
 
 
 #
-# iOS
+# Ouya
 #
 
-premake-ios: premake/premake4.lua
-	@echo "Generating makefiles for ios ..."
-	@premake4 --file=premake/premake4.lua --gcc=ios --platform=x32 gmake
-.PHONY: premake-ios
+make-ouya-host:
+	@cd ant && bash make-host.sh -p com.mydigitaldecay.orange.moai-host -a armeabi-v7a  -l android-16
+.PHONY: make-ouya-host
 
-ios-debug:
-	@${MAKE} premake-ios
-	@${MAKE} -C build/gmake-ios config=debug32
-.PHONY: ios-debug
+ouya-debug: make-ouya-host
+#	@bash make-host.sh 
+.PHONY: ouya-debug
 
-ios-release:
-	@${MAKE} premake-ios
-	@${MAKE} -C build/gmake-ios config=release32
-.PHONY: ios-release
+ouya-release: make-ouya-host
+.PHONY: ouya-release
 
-ios: ios-debug ios-release
-.PHONY: ios
+ouya: ouya-debug ouya-release
+.PHONY: ouya
 
-clean-ios:
-	@test -d build/gmake-ios && ${MAKE} -C build/gmake-ios clean; true
-	@test -d out/ios && rm -r out/ios; true
-.PHONY: clean-ios
+clean-ouya:
+	@cd ant/libmoai && bash clean.sh
+.PHONY: clean-ouya
 
 
 #
@@ -88,10 +83,40 @@ clean-linux:
 	@test -d out/linux && rm -r out/linux; true
 .PHONY: clean-linux
 
-clean:
-	@test -d build/gmake-osx && ${MAKE} -C build/gmake-osx clean; true
+
+#
+# iOS (untested)
+#
+
+premake-ios: premake4.lua
+	@echo "Generating makefiles for ios ..."
+	@premake4 --file=./premake4.lua --gcc=ios --platform=x32 gmake
+.PHONY: premake-ios
+
+ios-debug:
+	@${MAKE} premake-ios
+	@${MAKE} -C build/gmake-ios config=debug32
+.PHONY: ios-debug
+
+ios-release:
+	@${MAKE} premake-ios
+	@${MAKE} -C build/gmake-ios config=release32
+.PHONY: ios-release
+
+ios: ios-debug ios-release
+.PHONY: ios
+
+clean-ios:
 	@test -d build/gmake-ios && ${MAKE} -C build/gmake-ios clean; true
-	@test -d build/gmake-linux && ${MAKE} -C build/gmake-linux clean; true
+	@test -d out/ios && rm -r out/ios; true
+.PHONY: clean-ios
+
+
+#
+# Common targets
+#
+
+clean: clean-osx clean-ouya clean-linux clean-ios
 	@test -d out && rm -r out/; true
 .PHONY: clean
 
@@ -103,12 +128,15 @@ help:
 	@echo "   osx"
 	@echo "   osx-debug"
 	@echo "   osx-release"
-	@echo "   ios"
-	@echo "   ios-debug"
-	@echo "   ios-release"
+	@echo "   ouya"
+	@echo "   ouya-debug"
+	@echo "   ouya-release"
 	@echo "   linux"
 	@echo "   linux-debug"
 	@echo "   linux-release"
+	@echo "   ios"
+	@echo "   ios-debug"
+	@echo "   ios-release"
 	@echo "   clean"
 	@echo "   help"
 .PHONY: help

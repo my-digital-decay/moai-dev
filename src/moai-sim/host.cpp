@@ -37,6 +37,12 @@ void AKUEnqueueCompassEvent ( int deviceID, int sensorID, float heading ) {
 }
 
 //----------------------------------------------------------------//
+void AKUEnqueueJoystickEvent ( int deviceID, int sensorID, float x, float y ) {
+
+	MOAIInputMgr::Get ().EnqueueJoystickEvent (( u8 )deviceID, ( u8 )sensorID, x, y );
+}
+
+//----------------------------------------------------------------//
 void AKUEnqueueKeyboardAltEvent ( int deviceID, int sensorID, bool down ) {
 
 	MOAIInputMgr::Get ().EnqueueKeyboardEvent (( u8 )deviceID, ( u8 )sensorID, MOAIKeyCodes::ALT, down );
@@ -88,6 +94,12 @@ void AKUEnqueueTouchEvent ( int deviceID, int sensorID, int touchID, bool down, 
 void AKUEnqueueTouchEventCancel ( int deviceID, int sensorID ) {
 
 	MOAIInputMgr::Get ().EnqueueTouchEventCancel (( u8 )deviceID, ( u8 )sensorID );
+}
+
+//----------------------------------------------------------------//
+void AKUEnqueueTriggerEvent ( int deviceID, int sensorID, float value ) {
+
+	MOAIInputMgr::Get ().EnqueueTriggerEvent (( u8 )deviceID, ( u8 )sensorID, value );
 }
 
 //----------------------------------------------------------------//
@@ -195,6 +207,7 @@ void AKUInitializeSim () {
 	REGISTER_LUA_CLASS ( MOAITimer )
 	REGISTER_LUA_CLASS ( MOAITouchSensor )
 	REGISTER_LUA_CLASS ( MOAITransform )
+	REGISTER_LUA_CLASS ( MOAITriggerSensor )
 	REGISTER_LUA_CLASS ( MOAIVertexBuffer )
 	REGISTER_LUA_CLASS ( MOAIVertexFormat )
 	REGISTER_LUA_CLASS ( MOAIViewport )
@@ -339,6 +352,12 @@ void AKUSetInputDevicePointer ( int deviceID, int sensorID, char const* name ) {
 void AKUSetInputDeviceTouch ( int deviceID, int sensorID, char const* name ) {
 
 	MOAIInputMgr::Get ().SetSensor (( u8 )deviceID, ( u8 )sensorID, name, MOAISensor::TOUCH );
+}
+
+//----------------------------------------------------------------//
+void AKUSetInputDeviceTrigger ( int deviceID, int sensorID, char const* name ) {
+
+	MOAIInputMgr::Get ().SetSensor (( u8 )deviceID, ( u8 )sensorID, name, MOAISensor::TRIGGER );
 }
 
 //----------------------------------------------------------------//

@@ -27,6 +27,10 @@
 #include <moai-untz/host.h>
 #endif
 
+#if MOAI_WITH_BOX2D
+#include <moai-box2d/host.h>
+#endif
+
 //================================================================//
 // Input event locking queue
 //================================================================//
@@ -97,10 +101,13 @@
 	struct InputEvent {
 
 		enum {
-			INPUTEVENT_LEVEL,
 			INPUTEVENT_COMPASS,
+			INPUTEVENT_JOYSTICK,
+			INPUTEVENT_KEYBOARD,
+			INPUTEVENT_LEVEL,
 			INPUTEVENT_LOCATION,
 			INPUTEVENT_TOUCH,
+			INPUTEVENT_TRIGGER,
 		};
 
 		// all
@@ -108,7 +115,10 @@
 		int 	m_deviceId;
 		int 	m_sensorId;
 
-		// touch, level
+        // keyboard
+        int     m_keyCode;
+
+		// touch, level, joystick
 		float 	m_x;
 		float 	m_y;
 	
@@ -120,8 +130,10 @@
 
 		// touch
 		int  	m_touchId;
-		bool 	m_down;
 		int  	m_tapCount;
+
+        // touch, keyboard
+		bool 	m_down;
 	
 		// location
 		double 	m_longitude;
@@ -185,6 +197,38 @@
 		inputQueue->Push ( ievent );
 	}
 
+    //----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUEnqueueJoystickEvent ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jfloat x, jfloat y ) {
+
+        InputEvent ievent;
+
+		ievent.m_type = InputEvent::INPUTEVENT_JOYSTICK;
+
+		ievent.m_deviceId = deviceId;
+		ievent.m_sensorId = sensorId;
+
+		ievent.m_x = x;
+		ievent.m_y = y;
+
+		inputQueue->Push ( ievent );
+    }
+
+    //----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUEnqueueKeyboardEvent ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jint keyCode, jboolean down ) {
+
+        InputEvent ievent;
+
+		ievent.m_type = InputEvent::INPUTEVENT_KEYBOARD;
+
+		ievent.m_deviceId = deviceId;
+		ievent.m_sensorId = sensorId;
+
+		ievent.m_keyCode = keyCode;
+		ievent.m_down = down;
+
+		inputQueue->Push ( ievent );
+    }
+
 	//----------------------------------------------------------------//
 	extern "C" void Java_com_ziplinegames_moai_Moai_AKUEnqueueLevelEvent ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jfloat x, jfloat y, jfloat z ) {
 		
@@ -236,6 +280,21 @@
 		ievent.m_down = down;
 		ievent.m_x = x;
 		ievent.m_y = y;
+
+		inputQueue->Push ( ievent );
+	}
+
+    //----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUEnqueueTriggerEvent ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jfloat value ) {
+
+		InputEvent ievent;
+
+		ievent.m_type = InputEvent::INPUTEVENT_TRIGGER;
+
+		ievent.m_deviceId = deviceId;
+		ievent.m_sensorId = sensorId;
+
+		ievent.m_x = value;
 
 		inputQueue->Push ( ievent );
 	}
@@ -356,6 +415,20 @@
 
 		inputQueue = new LockingQueue < InputEvent > ();
 	}
+
+    //----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUInitializeBox2D ( JNIEnv* env, jclass obj ) {
+#if MOAI_WITH_BOX2D
+        AKUInitializeBox2D ();
+#endif
+    }
+
+    //----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUFinalizeBox2D ( JNIEnv* env, jclass obj ) {
+#if MOAI_WITH_BOX2D
+        AKUFinalizeBox2D ();
+#endif
+    }
 
 	//----------------------------------------------------------------//
 	extern "C" void Java_com_ziplinegames_moai_Moai_AKUMountVirtualDirectory ( JNIEnv* env, jclass obj, jstring jvirtualPath, jstring jarchive ) {
@@ -519,6 +592,26 @@
 		JNI_RELEASE_CSTRING ( jname, name );
 	}
 
+//----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUSetInputDeviceJoystick ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jstring jname ) {
+
+		JNI_GET_CSTRING ( jname, name );
+
+		AKUSetInputDeviceJoystick ( deviceId, sensorId, name );
+
+		JNI_RELEASE_CSTRING ( jname, name );
+	}
+
+    //----------------------------------------------------------------//
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUSetInputDeviceKeyboard ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jstring jname ) {
+
+		JNI_GET_CSTRING ( jname, name );
+
+		AKUSetInputDeviceKeyboard ( deviceId, sensorId, name );
+
+		JNI_RELEASE_CSTRING ( jname, name );
+	}
+
 	//----------------------------------------------------------------//
 	extern "C" void Java_com_ziplinegames_moai_Moai_AKUSetInputDeviceLevel ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jstring jname ) {
 
@@ -550,11 +643,11 @@
 	}
 
     //----------------------------------------------------------------//
-	extern "C" void Java_com_ziplinegames_moai_Moai_AKUSetInputDeviceJoystick ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jstring jname ) {
+	extern "C" void Java_com_ziplinegames_moai_Moai_AKUSetInputDeviceTrigger ( JNIEnv* env, jclass obj, jint deviceId, jint sensorId, jstring jname ) {
 
 		JNI_GET_CSTRING ( jname, name );
 
-		AKUSetInputDeviceJoystick ( deviceId, sensorId, name );
+		AKUSetInputDeviceTrigger ( deviceId, sensorId, name );
 
 		JNI_RELEASE_CSTRING ( jname, name );
 	}
@@ -603,18 +696,73 @@
 		while ( inputQueue->Pop ( ievent )) {
 			
 			switch ( ievent.m_type ) {
-				
-			case InputEvent::INPUTEVENT_TOUCH:
-				AKUEnqueueTouchEvent ( ievent.m_deviceId, ievent.m_sensorId, ievent.m_touchId, ievent.m_down, ievent.m_x, ievent.m_y );
+		
+            case InputEvent::INPUTEVENT_COMPASS:
+				AKUEnqueueCompassEvent (
+                        ievent.m_deviceId,
+                        ievent.m_sensorId,
+                        ievent.m_heading
+                );
 				break;
+
+            case InputEvent::INPUTEVENT_JOYSTICK:
+				AKUEnqueueJoystickEvent (
+                        ievent.m_deviceId,
+                        ievent.m_sensorId,
+                        ievent.m_x,
+                        ievent.m_y
+                );
+				break;
+
+            case InputEvent::INPUTEVENT_KEYBOARD:
+				AKUEnqueueKeyboardEvent (
+                        ievent.m_deviceId,
+                        ievent.m_sensorId,
+                        ievent.m_keyCode,
+                        ievent.m_down
+                );
+				break;
+
 			case InputEvent::INPUTEVENT_LEVEL:
-				AKUEnqueueLevelEvent ( ievent.m_deviceId, ievent.m_sensorId, ievent.m_x, ievent.m_y, ievent.m_z );
+				AKUEnqueueLevelEvent (
+                        ievent.m_deviceId,
+                        ievent.m_sensorId,
+                        ievent.m_x,
+                        ievent.m_y,
+                        ievent.m_z
+                );
 				break;
-			case InputEvent::INPUTEVENT_COMPASS:
-				AKUEnqueueCompassEvent ( ievent.m_deviceId, ievent.m_sensorId, ievent.m_heading );
-				break;
+
 			case InputEvent::INPUTEVENT_LOCATION:
-				AKUEnqueueLocationEvent ( ievent.m_deviceId, ievent.m_sensorId, ievent.m_longitude, ievent.m_latitude, ievent.m_altitude, ievent.m_hAccuracy, ievent.m_vAccuracy, ievent.m_speed );
+				AKUEnqueueLocationEvent (
+                        ievent.m_deviceId,
+                        ievent.m_sensorId,
+                        ievent.m_longitude,
+                        ievent.m_latitude,
+                        ievent.m_altitude,
+                        ievent.m_hAccuracy,
+                        ievent.m_vAccuracy,
+                        ievent.m_speed
+                );
+				break;
+
+			case InputEvent::INPUTEVENT_TOUCH:
+				AKUEnqueueTouchEvent (
+                        ievent.m_deviceId,
+                        ievent.m_sensorId,
+                        ievent.m_touchId,
+                        ievent.m_down,
+                        ievent.m_x,
+                        ievent.m_y
+                );
+				break;
+
+            case InputEvent::INPUTEVENT_TRIGGER:
+				AKUEnqueueTriggerEvent (
+                        ievent.m_deviceId,
+                        ievent.m_sensorId,
+                        ievent.m_x
+                );
 				break;
 			}
 		}
