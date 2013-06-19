@@ -63,7 +63,7 @@ clean-ouya:
 premake-linux: premake/premake4.lua
 	@echo "Generating makefiles for linux ..."
 	@premake4 --file=premake/premake4.lua --gcc=linux --platform=x32 gmake
-.PHONY: premake-ios
+.PHONY: premake-linux
 
 linux-debug:
 	@${MAKE} premake-linux

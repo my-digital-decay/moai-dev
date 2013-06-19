@@ -230,7 +230,7 @@ static void GLFWCALL _onKey( int key, int state )
         break;
     }
 
-    printf("key: %d (%s)\n", key, pressed ? "press" : "release");
+//    printf("key: %d (%s)\n", key, pressed ? "press" : "release");
 
     _onSpecialKey( key );
 }
