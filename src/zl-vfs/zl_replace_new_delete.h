@@ -20,7 +20,7 @@
 
 	//----------------------------------------------------------------//
 	inline void* operator new ( size_t size ) throw ( std::bad_alloc ) {
-		void* mem = malloc ( size );
+		void* mem = zl_malloc ( size );
 		#if 0
 			if ( mem ) return mem;
 			throw std::bad_alloc();
@@ -31,12 +31,12 @@
 
 	//----------------------------------------------------------------//
 	inline void* operator new ( std::size_t size, const std::nothrow_t& ) throw () {
-		return malloc ( size );
+		return zl_malloc ( size );
 	}
 
 	//----------------------------------------------------------------//
 	inline void* operator new []( size_t size ) throw ( std::bad_alloc ) {
-		void* mem = malloc ( size );
+		void* mem = zl_malloc ( size );
 		#if 0
 			if ( mem ) return mem;
 			throw std::bad_alloc();
@@ -47,17 +47,19 @@
 
 	//----------------------------------------------------------------//
 	inline void* operator new []( std::size_t size, const std::nothrow_t& ) throw () {
-		return malloc ( size );
+		return zl_malloc ( size );
 	}
 
 	//----------------------------------------------------------------//
 	inline void operator delete ( void* ptr ) throw() {
-		free ( ptr );
+        if ( ptr )
+		    zl_free ( ptr );
 	}
 
 	//----------------------------------------------------------------//
 	inline void operator delete []( void* ptr ) throw() {
-		free ( ptr );
+		if ( ptr )
+            zl_free ( ptr );
 	}
 
 #endif
