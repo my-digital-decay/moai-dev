@@ -182,12 +182,33 @@ void MOAIInputMgr::ReserveDevices ( u8 total ) {
 }
 
 //----------------------------------------------------------------//
+void MOAIInputMgr::ClearDevices () {
+
+    for ( u32 i = 0; i < this->mDevices.Size (); ++i ) {
+		MOAIInputDevice* device = this->mDevices [ i ];
+		if ( device ) {
+			device->ClearSensors ();
+		}
+	}
+    this->mDevices.Clear ();
+}
+
+//----------------------------------------------------------------//
 void MOAIInputMgr::ReserveSensors ( u8 deviceID, u8 total ) {
 
 	MOAIInputDevice* device = this->GetDevice ( deviceID );
 	if ( device ) {
 		device->ReserveSensors ( total );
 	}
+}
+
+//----------------------------------------------------------------//
+void MOAIInputMgr::ClearSensors ( u8 deviceID ) {
+
+    MOAIInputDevice* device = this->GetDevice ( deviceID );
+    if ( device ) {
+        device->ClearSensors ();
+    }
 }
 
 //----------------------------------------------------------------//

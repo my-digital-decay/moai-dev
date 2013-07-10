@@ -255,13 +255,25 @@ void AKURender () {
 //----------------------------------------------------------------//
 void AKUReserveInputDevices ( int total ) {
 
-	MOAIInputMgr::Get ().ReserveDevices (( u8 )total );
+	MOAIInputMgr::Get ().ReserveDevices ( ( u8 )total );
+}
+
+//----------------------------------------------------------------//
+void AKUClearInputDevices () {
+	
+    MOAIInputMgr::Get ().ClearDevices ();
 }
 
 //----------------------------------------------------------------//
 void AKUReserveInputDeviceSensors ( int deviceID, int total ) {
 
-	MOAIInputMgr::Get ().ReserveSensors (( u8 )deviceID, ( u8 )total );
+	MOAIInputMgr::Get ().ReserveSensors ( ( u8 )deviceID, ( u8 )total );
+}
+
+//----------------------------------------------------------------//
+void AKUClearInputDeviceSensors ( int deviceID ) {
+	
+    MOAIInputMgr::Get ().ClearSensors ( ( u8 )deviceID );
 }
 
 //----------------------------------------------------------------//

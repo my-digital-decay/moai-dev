@@ -40,6 +40,7 @@ public:
 	void			RegisterLuaClass	( MOAILuaState& state );
 	void			RegisterLuaFuncs	( MOAILuaState& state );
 	void			ReserveSensors		( u8 total );
+    void            ClearSensors        ();
 	void			Reset				();
 	void			SetSensor			( u8 sensorID, cc8* name, u32 type );
 };

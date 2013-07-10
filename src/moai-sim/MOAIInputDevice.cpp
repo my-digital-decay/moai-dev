@@ -76,6 +76,12 @@ void MOAIInputDevice::ReserveSensors ( u8 total ) {
 }
 
 //----------------------------------------------------------------//
+void MOAIInputDevice::ClearSensors ( ) {
+
+	this->mSensors.Clear ();
+}
+
+//----------------------------------------------------------------//
 void MOAIInputDevice::Reset () {
 
 	for ( u32 i = 0; i < this->mSensors.Size (); ++i ) {

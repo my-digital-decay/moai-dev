@@ -45,7 +45,9 @@ AKU_API void			AKUSetFunc_SetSimStep			( AKUSetSimStepFunc func );
 
 // input device api
 AKU_API void			AKUReserveInputDevices			( int total );
+AKU_API void			AKUClearInputDevices			();
 AKU_API void			AKUReserveInputDeviceSensors	( int deviceID, int total );
+AKU_API void			AKUClearInputDeviceSensors	    ( int deviceID );
 AKU_API void			AKUSetInputConfigurationName	( char const* name );
 AKU_API void			AKUSetInputDevice				( int deviceID, char const* name );
 AKU_API void			AKUSetInputDeviceActive			( int deviceID, bool active );

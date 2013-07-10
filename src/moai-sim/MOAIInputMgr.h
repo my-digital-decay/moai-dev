@@ -49,7 +49,9 @@ public:
 						~MOAIInputMgr				();
 	void				RegisterLuaClass			( MOAILuaState& state );
 	void				ReserveDevices				( u8 total );
+	void				ClearDevices				();
 	void				ReserveSensors				( u8 deviceID, u8 total );
+	void				ClearSensors				( u8 deviceID );
 	void				SetConfigurationName		( cc8* name );
 	void				SetDevice					( u8 deviceID, cc8* name );
 	void				SetDeviceActive				( u8 deviceID, bool active );
