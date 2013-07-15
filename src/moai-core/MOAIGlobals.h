@@ -59,12 +59,23 @@ protected:
 // MOAIGlobalPair
 //================================================================//
 class MOAIGlobalPair {
+public:
+
+    MOAIGlobalPair();
+
 private:
 	friend class MOAIGlobals;
 
 	MOAIObject*					mObject;
 	void*						mPtr;
 };
+
+//================================================================//
+inline MOAIGlobalPair::MOAIGlobalPair()
+: mObject(0L)
+, mPtr(0L)
+{
+}
 
 //================================================================//
 // MOAIGlobals
