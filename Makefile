@@ -116,6 +116,38 @@ clean-ios:
 # Common targets
 #
 
+ifeq ("$(shell which ctags)x", "x")
+CTAGS := 
+else
+CTAGS := ctags
+endif
+
+CTAGS_FLAGS	:=  -I "AKU_API" \
+				*.cpp *.h \
+				../config/moai_config.h \
+				../moai-core/*.h \
+				../moai-sim/*.h \
+				../moai-util/*.h \
+				../zl-common/*.h \
+				../zl-gfx/*.h \
+				../zl-util/*.h \
+				../zl-vfs/*.h
+
+ctags:
+ifeq ($(CTAGS),)
+	@echo "No valid ctags command found"
+else
+	@echo "Generating MOAI tag files ..."
+	@cd src/moai-core ; $(CTAGS) $(CTAGS_FLAGS) &> /dev/null
+	@cd src/moai-sim ; $(CTAGS) $(CTAGS_FLAGS) &> /dev/null
+	@cd src/moai-util ; $(CTAGS) $(CTAGS_FLAGS) &> /dev/null
+	@cd src/moai-box2d ; $(CTAGS) $(CTAGS_FLAGS) &> /dev/null
+	@cd src/zl-gfx ; $(CTAGS) $(CTAGS_FLAGS) &> /dev/null
+	@cd src/zl-util ; $(CTAGS) $(CTAGS_FLAGS) &> /dev/null
+	@cd src/zl-vfs ; $(CTAGS) $(CTAGS_FLAGS) &> /dev/null
+endif
+.PHONY: ctags
+
 clean: clean-osx clean-ouya clean-linux clean-ios
 	@test -d out && rm -r out/; true
 .PHONY: clean
