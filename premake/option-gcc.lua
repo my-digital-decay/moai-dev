@@ -1,7 +1,12 @@
 --------------------------------------------------------------------------------
--- file: option-gcc.lua
--- gcc custom build option
---
+--- file: option-gcc.lua
+--- gcc custom build option
+---
+
+local match = string.match
+function trim(s)
+  return match(s,'^()%s*$') and '' or match(s,'^%s*(.*%S)')
+end
 
 newoption {
   trigger = "gcc",
@@ -14,9 +19,6 @@ newoption {
   }
 }
 
---  ROOT_PATH = ".."
---  local DEV_PATH = ""
---  local OUT_PATH = (ROOT_PATH .. "/out/")
 if _ACTION == "gmake" then
   if nil == _OPTIONS.gcc then
     print("GCC flavor must be specified!")

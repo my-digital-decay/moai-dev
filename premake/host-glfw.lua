@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
--- host-glfw project build file
---
+--- file:host-glfw.lua
+--- host-glfw project build file
+---
 
 project "host-glfw"
   kind "ConsoleApp"
@@ -30,14 +31,14 @@ project "host-glfw"
     "libzl-vfs",
   }
 
-  -- cross-platform configuration specific settings
+  --- cross-platform configuration specific settings
   debug_cfg = configuration "debug"
     targetdir (OUT_PATH .. "/debug")
 
   release_cfg = configuration "release"
     targetdir (OUT_PATH .. "/release")
 
-  -- platform specific settings
+  --- platform specific settings
   configuration "osx"
     targetname "moai-osx"
 --      files {

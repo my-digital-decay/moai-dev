@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
--- libmoai-core project build file
---
+--- libmoai-core project build file
+---
 
 project "libmoai-core"
   targetname "moai-core"
