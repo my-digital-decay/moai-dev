@@ -35,7 +35,7 @@ class MOAICpSpace;
 class MOAILayer :
 	public virtual MOAIProp,
 	public MOAIClearableView {
-private:
+protected:
 
 	MOAILuaSharedPtr < MOAICamera >			mCamera;
 	MOAILuaSharedPtr < MOAIViewport >		mViewport;

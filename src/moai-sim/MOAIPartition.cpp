@@ -672,3 +672,24 @@ void MOAIPartition::SetPlane ( u32 planeID ) {
 	this->mPlaneID = planeID;
 	this->Rebuild ();
 }
+
+
+//----------------------------------------------------------------//
+void MOAIPartition::SerializeIn( MOAILuaState& state, MOAIDeserializer& serializer ) {
+
+    if ( state.GetFieldWithType ( -1, "MOAIPartition", LUA_TTABLE )) {
+        mPlaneID = state.GetField( -1, "mPlaneID", 0 );
+        mPriorityCounter = state.GetField( -1, "mPriorityCounter", 0 );
+		state.Pop ( 1 );
+    }
+}
+
+//----------------------------------------------------------------//
+void MOAIPartition::SerializeOut( MOAILuaState& state, MOAISerializer& serializer ) {
+    
+    lua_newtable ( state );
+        state.SetField ( -1, "mPlaneID", mPlaneID );
+        state.SetField ( -1, "mPriorityCounter", mPriorityCounter );
+	lua_setfield ( state, -2, "MOAIPartition" );
+}
+

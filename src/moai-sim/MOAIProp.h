@@ -235,8 +235,8 @@ public:
 	void				RegisterLuaClass		( MOAILuaState& state );
 	void				RegisterLuaFuncs		( MOAILuaState& state );
 	void				Render					();
-	void				SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
-	void				SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
+	virtual void		SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
+	virtual void		SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
 	void				SetPartition			( MOAIPartition* partition );
 	void				SetVisible				( bool visible );
 };

@@ -51,8 +51,6 @@ private:
 
 	//----------------------------------------------------------------//
 	void			AffirmPriority			( MOAIProp& prop );
-	void			PrepareRebuild			();
-	void			Rebuild					();
 	void			UpdateProp				( MOAIProp& prop, u32 status );
 
 public:
@@ -77,6 +75,11 @@ public:
 	void			ReserveLevels			( int totalLevels );
 	void			SetLevel				( int levelID, float cellSize, int width, int height );
 	void			SetPlane				( u32 planeID );
+	void			PrepareRebuild			();
+	void			Rebuild					();
+	
+    void			SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
+	void			SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
 };
 
 #endif

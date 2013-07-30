@@ -62,6 +62,10 @@ public:
 	void			OnDepNodeUpdate		();
 	void			RegisterLuaClass	( MOAILuaState& state );
 	void			RegisterLuaFuncs	( MOAILuaState& state );
+
+	void			SerializeIn			( MOAILuaState& state, MOAIDeserializer& serializer );
+	void			SerializeOut		( MOAILuaState& state, MOAISerializer& serializer );
+
 };
 
 #endif

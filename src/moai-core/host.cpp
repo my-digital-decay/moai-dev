@@ -103,6 +103,7 @@ AKUContextID AKUCreateContext () {
 	
 	REGISTER_LUA_CLASS ( MOAILogMgr )
 	REGISTER_LUA_CLASS ( MOAISerializer )
+	REGISTER_LUA_CLASS ( MOAIDeserializer )
 
 	return sContextIDCounter;
 }

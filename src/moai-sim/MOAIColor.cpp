@@ -255,3 +255,27 @@ void MOAIColor::RegisterLuaFuncs ( MOAILuaState& state ) {
 	
 	luaL_register ( state, 0, regTable );
 }
+
+//----------------------------------------------------------------//
+void MOAIColor::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
+
+    if ( state.GetFieldWithType ( -1, "MOAIColor", LUA_TTABLE )) {
+        mR = state.GetField( -1, "mR", 1.0f );
+        mG = state.GetField( -1, "mG", 1.0f );
+        mB = state.GetField( -1, "mB", 1.0f );
+        mA = state.GetField( -1, "mA", 1.0f );
+		state.Pop ( 1 );
+    }
+}
+
+//----------------------------------------------------------------//
+void MOAIColor::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
+
+	lua_newtable ( state );
+	  state.SetField ( -1, "mR", mR );
+	  state.SetField ( -1, "mG", mG );
+	  state.SetField ( -1, "mB", mB );
+	  state.SetField ( -1, "mA", mA );
+	lua_setfield ( state, -2, "MOAIColor" );
+}
+
