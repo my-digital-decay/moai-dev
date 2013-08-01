@@ -52,7 +52,7 @@ protected:
 	// TODO: refactor; not all decks need thse (or will be limited to these)
 	MOAILuaSharedPtr < MOAIGfxState > mShader;
 	MOAILuaSharedPtr < MOAIGfxState > mTexture;
-	
+
 	u32 mContentMask;
 	SET ( u32, ContentMask, mContentMask )
 
@@ -87,6 +87,9 @@ public:
 							~MOAIDeck				();
 	void					RegisterLuaClass		( MOAILuaState& state );
 	void					RegisterLuaFuncs		( MOAILuaState& state );
+
+	virtual	void			SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
+	virtual	void			SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
 };
 
 #endif

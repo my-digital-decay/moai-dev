@@ -245,3 +245,41 @@ void MOAIDeck::SetBoundsDirty () {
 
 	this->mBoundsDirty = true;
 }
+
+//----------------------------------------------------------------//
+void MOAIDeck::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
+	
+	UNUSED ( serializer );
+    if ( state.GetFieldWithType ( -1, "MOAIDeck", LUA_TTABLE )) {
+        mContentMask = state.GetField( -1, "mContentMask", 0xffffffff );
+        mDefaultShaderID = state.GetField( -1, "mDefaultShaderID", (u32)MOAIShaderMgr::DECK2D_SHADER );
+        if ( state.GetFieldWithType ( -1, "mMaxBounds", LUA_TTABLE )) {
+            mMaxBounds.mMin.mX = state.GetField( -1, "mMin.mX", 0 );
+            mMaxBounds.mMin.mY = state.GetField( -1, "mMin.mY", 0 );
+            mMaxBounds.mMin.mZ = state.GetField( -1, "mMin.mZ", 0 );
+            mMaxBounds.mMax.mX = state.GetField( -1, "mMax.mX", 0 );
+            mMaxBounds.mMax.mY = state.GetField( -1, "mMax.mY", 0 );
+            mMaxBounds.mMax.mZ = state.GetField( -1, "mMax.mZ", 0 );
+		    state.Pop ( 1 );
+        }
+		state.Pop ( 1 );
+    }
+}
+
+//----------------------------------------------------------------//
+void MOAIDeck::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
+	
+	UNUSED ( serializer );
+    lua_newtable ( state );
+        state.SetField ( -1, "mContentMask", mContentMask );
+        state.SetField ( -1, "mDefaultShaderID", mDefaultShaderID );
+        lua_newtable ( state );
+            state.SetField ( -1, "mMin.mX", mMaxBounds.mMin.mX );
+            state.SetField ( -1, "mMin.mY", mMaxBounds.mMin.mY );
+            state.SetField ( -1, "mMin.mZ", mMaxBounds.mMin.mZ );
+            state.SetField ( -1, "mMax.mX", mMaxBounds.mMax.mX );
+            state.SetField ( -1, "mMax.mY", mMaxBounds.mMax.mY );
+            state.SetField ( -1, "mMax.mZ", mMaxBounds.mMax.mZ );
+	    lua_setfield ( state, -2, "mMaxBounds" );
+	lua_setfield ( state, -2, "MOAIDeck" );
+}
