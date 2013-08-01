@@ -20,6 +20,9 @@
 
 #include <moai-box2d/MOAIBox2DDebugDraw.h>
 
+#include <moai-sim/MOAIGfxDevice.h>
+#include <zl-gfx/headers.h>
+
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>

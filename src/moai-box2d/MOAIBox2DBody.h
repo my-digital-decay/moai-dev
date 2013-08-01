@@ -5,6 +5,7 @@
 #define	MOAIBOX2DBODY_H
 
 #include <moai-box2d/MOAIBox2DWorld.h>
+#include <moai-sim/MOAITransformBase.h>
 
 class b2Body;
 

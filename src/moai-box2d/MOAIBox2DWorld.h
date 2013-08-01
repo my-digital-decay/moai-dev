@@ -4,6 +4,7 @@
 #ifndef	MOAIBOX2DWORLD_H
 #define	MOAIBOX2DWORLD_H
 
+#include <moai-sim/MOAIAction.h>
 #include <Box2D/Box2D.h>
 
 class b2World;

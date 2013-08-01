@@ -8,6 +8,8 @@
 #include <moai-box2d/MOAIBox2DFixture.h>
 #include <moai-box2d/MOAIBox2DWorld.h>
 
+#include <moai-sim/MOAITransform.h>
+
 //================================================================//
 // local
 //================================================================//
