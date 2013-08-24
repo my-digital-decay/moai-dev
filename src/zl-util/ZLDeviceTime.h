@@ -12,7 +12,7 @@ namespace ZLDeviceTime {
 	#ifdef _WIN32
 		typedef long long TimeStamp;
 	#elif __APPLE__
-		typedef uint64_t TimeStamp;
+		typedef unsigned long long TimeStamp;
 	#elif ANDROID
 		typedef long TimeStamp;
 	#elif __linux
