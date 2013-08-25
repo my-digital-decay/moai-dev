@@ -27,6 +27,7 @@ project "libmoai-untz"
     ROOT_PATH .. "/3rdparty/libogg-1.2.2/include",
     ROOT_PATH .. "/3rdparty/libvorbis-1.3.2/include",
     ROOT_PATH .. "/3rdparty/libvorbis-1.3.2/lib",
+    ROOT_PATH .. "/3rdparty/lua-5.1.3/src",
     ROOT_PATH .. "/3rdparty/tinyxml", -- dependency ??
     ROOT_PATH .. "/3rdparty/freetype-2.4.4/include", -- remove dependency
   }

@@ -24,7 +24,7 @@ typedef char Int8;
 typedef unsigned long ULong;
 
 #if defined(__APPLE__)
-    #include <MacTypes.h>
+    #include <CoreAudio/CoreAudiotypes.h>
 #else
     typedef unsigned int UInt32;
     typedef signed short SInt16;

@@ -15,6 +15,7 @@ project "libmoai-util"
     ROOT_PATH .. "/src/config",
     ROOT_PATH .. "/3rdparty",
     ROOT_PATH .. "/3rdparty/jansson-2.1/src",
+    ROOT_PATH .. "/3rdparty/lua-5.1.3/src",
     ROOT_PATH .. "/3rdparty/sfmt-1.4",
     ROOT_PATH .. "/3rdparty/tinyxml",
   }

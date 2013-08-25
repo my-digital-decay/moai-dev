@@ -13,6 +13,7 @@ project "libzl-util"
     ROOT_PATH .. "/src",
     ROOT_PATH .. "/src/config",
     ROOT_PATH .. "/3rdparty",
+    ROOT_PATH .. "/3rdparty/lua-5.1.3/src",
     ROOT_PATH .. "/3rdparty/ooid-0.99",
 --      ROOT_PATH .. "/3rdparty/tlsf-2.0",
 --      ROOT_PATH .. "/3rdparty/zlib-1.2.3",

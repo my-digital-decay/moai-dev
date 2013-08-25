@@ -16,6 +16,7 @@ project "libmoai-sim"
     ROOT_PATH .. "/3rdparty",
     ROOT_PATH .. "/3rdparty/box2d-2.2.1",
     ROOT_PATH .. "/3rdparty/lpng140",
+    ROOT_PATH .. "/3rdparty/lua-5.1.3/src",
     ROOT_PATH .. "/3rdparty/tinyxml", -- dependency ??
     ROOT_PATH .. "/3rdparty/freetype-2.4.4/include",
   }
